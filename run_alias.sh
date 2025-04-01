@@ -33,5 +33,9 @@ if [ ! -f "$file_path" ]; then
     exit 1
 fi
 
-# Exécuter le fichier avec les paramètres restants
-bash "$file_path" "$@"
+# Vérifier si le fichier contient #isSudo
+if grep -q "^#isSudo" "$file_path"; then
+    sudo bash "$file_path" "$@"
+else
+    bash "$file_path" "$@"
+fi

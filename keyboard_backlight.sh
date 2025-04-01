@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #alias="kl"
+#isSudo
 
 # Fichier de contrôle du rétroéclairage du clavier
 BACKLIGHT_PATH="/sys/class/leds/dell::kbd_backlight/brightness"
@@ -15,8 +16,7 @@ fi
 usage() {
     echo "Usage: $(basename "$0") [OPTION]"
     echo "  -l, --low       Rétroéclairage faible"
-    echo "  -m, --medium    Rétroéclairage moyen"
-    echo "  -h, --high      Rétroéclairage élevé"
+    echo "  -m, --medium    Rétroéclairage elevé"
     echo "  -o, --off       Désactiver le rétroéclairage"
     echo "  -H, --help      Afficher cette aide"
     exit 0
@@ -33,9 +33,6 @@ case "$1" in
         ;;
     -m|--medium)
         echo 2 > "$BACKLIGHT_PATH"
-        ;;
-    -h|--high)
-        echo 3 > "$BACKLIGHT_PATH"
         ;;
     -o|--off)
         echo 0 > "$BACKLIGHT_PATH"
