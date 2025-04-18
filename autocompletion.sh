@@ -1,9 +1,31 @@
-_mycommand_completions() {
-    local cur opts
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    opts=$(cat /home/romb38/Documents/Scripts/commands.txt)  # Mettez le chemin vers votre fichier de commandes ici
-
-    COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
-    return 0
+ms() {
+  bash "$HOME/Documents/Scripts/run_alias.sh" "$@"
 }
-complete -F _mycommand_completions ms
+
+concat_lines() {
+  local file="$1"
+  
+  if [ ! -f "$file" ]; then
+    echo "Le fichier $file n'existe pas." >&2
+    return 1
+  fi
+  
+  local result
+  result=$(awk 'NF' "$file" | tr '\n' ' ' | sed 's/  */ /g')
+  echo "$result"
+}
+
+_ms_completion() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+
+  if [ $COMP_CWORD -eq 1 ]; then
+    # Autocomplétion personnalisée uniquement pour le 1er argument
+    COMPREPLY=( $(compgen -W "$(concat_lines "$HOME/Documents/Scripts/commands.txt")" -- "$cur") )
+  else
+    # Autocomplétion par défaut (fichiers, dossiers, commandes, etc.)
+    COMPREPLY=( $(compgen -f -- "$cur") )
+  fi
+}
+
+# Active l'autocomplétion sur la commande ms
+complete -F _ms_completion ms
