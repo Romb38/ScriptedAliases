@@ -44,7 +44,7 @@ Pour ajouter un alias, vous devez
 
 - \#MS_ALIAS="<alias>" : Ce flag permet de définir l'alias pour votre script
 - \#MS_SUDO : Ce flag indique que ce script doit être joué en tant que superutilisateur
-_ \#MS_IGNORE : Ce flag indique que ce script doit être ignoré lors du sourçage
+- \#MS_IGNORE : Ce flag indique que ce script doit être ignoré lors du sourçage
 
 ## Les commandes par défaut
 
