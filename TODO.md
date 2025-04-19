@@ -1,4 +1,6 @@
 # A faire
 
-- Ajouter un 'install.sh'
-- Généraliser l'installation plus facilement avec le paramétrage d'un dossier
+- Créer une documentation
+- Tester l'installation sur un nouveau système (with docker)
+- Déplacer le fichier dans un bon endroit
+- Traduire en anglais

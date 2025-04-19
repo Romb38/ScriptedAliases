@@ -2,8 +2,10 @@
 
 #MS_IGNORE
 
+SCRIPT_DIR="$HOME/Documents/Scripts"
+
 ms() {
-  bash "$HOME/Documents/Scripts/run_alias.sh" "$@"
+  bash "$SCRIPT_DIR/run_alias.sh" "$@"
 }
 
 concat_lines() {
@@ -24,7 +26,7 @@ _ms_completion() {
 
   if [ $COMP_CWORD -eq 1 ]; then
     # Autocomplétion personnalisée uniquement pour le 1er argument
-    COMPREPLY=( $(compgen -W "$(concat_lines "$HOME/Documents/Scripts/commands.txt")" -- "$cur") )
+    COMPREPLY=( $(compgen -W "$(concat_lines "$SCRIPT_DIR/commands.txt")" -- "$cur") )
   else
     # Autocomplétion par défaut (fichiers, dossiers, commandes, etc.)
     COMPREPLY=( $(compgen -f -- "$cur") )
