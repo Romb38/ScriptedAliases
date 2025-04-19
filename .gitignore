@@ -1,5 +1,4 @@
-__pycache__/
-signalCli/
 *.txt
 *.csv
 _old/
+/aliases/

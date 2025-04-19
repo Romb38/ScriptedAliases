@@ -1,3 +1,7 @@
+#!/bin/bash
+
+#MS_IGNORE
+
 ms() {
   bash "$HOME/Documents/Scripts/run_alias.sh" "$@"
 }
