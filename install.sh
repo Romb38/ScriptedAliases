@@ -48,6 +48,8 @@ source "$SCRIPTED_ALIASES_DIR/autocompletion.sh"
 if [ -f "$SCRIPTED_ALIASES_DIR/source.sh" ]; then
   echo "Exécution du fichier source.sh..."
   source "$SCRIPTED_ALIASES_DIR/source.sh"
+  $SCRIPTED_ALIASES_DIR/ms_system/manage_dir.sh add -r $SCRIPTED_ALIASES_DIR
+  source "$SCRIPTED_ALIASES_DIR/source.sh"
 else
   echo "Fichier source.sh introuvable dans $SCRIPTED_ALIASES_DIR."
 fi
