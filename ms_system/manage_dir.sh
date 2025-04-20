@@ -45,15 +45,45 @@ add_dir() {
     exit 1
   fi
 
+  # Charger les exclusions depuis .ms_ignore
+  local ignore_file="$base/.ms_ignore"
+  local ignored_paths=()
+
+  if [[ -f "$ignore_file" ]]; then
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      [[ -z "$line" || "$line" == \#* ]] && continue  # ignorer lignes vides et commentaires
+      ignored_paths+=("$(realpath -m "$base/$line")")
+    done < "$ignore_file"
+  fi
+
+  should_ignore() {
+    local path="$1"
+    for ignored in "${ignored_paths[@]}"; do
+      if [[ "$path" == "$ignored" || "$path" == "$ignored/"* ]]; then
+        return 0
+      fi
+    done
+    return 1
+  }
+
   if [[ $recursive == true ]]; then
     echo "Recherche récursive dans : $base"
     find "$base" -type d | while read -r dir; do
-      add_single_dir "$dir"
+      if should_ignore "$dir"; then
+        echo "Ignoré (dans .ms_ignore) : $dir"
+      else
+        add_single_dir "$dir"
+      fi
     done
   else
-    add_single_dir "$base"
+    if should_ignore "$base"; then
+      echo "Répertoire ignoré (dans .ms_ignore) : $base"
+    else
+      add_single_dir "$base"
+    fi
   fi
 }
+
 
 add_single_dir() {
   local dir="$1"
