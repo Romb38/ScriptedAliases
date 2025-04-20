@@ -7,7 +7,7 @@
 Pour installer cet utilitaire sur votre machine 
 
 ```bash
-# Curl le fichier install.sh et le pipé dans bash
+curl https://raw.githubusercontent.com/Romb38/ScriptedAliases/refs/heads/master/install.sh | bash
 ```
 
 ## Usage
