@@ -4,11 +4,22 @@
 
 ## Installation
 
-Pour installer cet utilitaire sur votre machine 
+Pour installer cet utilitaire sur votre machine (attention à ce que vous piper dans bash !)
 
 ```bash
 curl https://raw.githubusercontent.com/Romb38/ScriptedAliases/refs/heads/master/install.sh | bash
 ```
+
+Ensuite redémarrer votre terminal ou faites :
+
+```bash
+# For ZSH users
+source $HOME/.zshrc
+
+# For bash users
+source $HOME/.bashrc
+```
+
 
 ## Usage
 

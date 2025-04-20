@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #MS_ALIAS="md"
+#MS_SYSTEM
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 SCRIPTS_FILE="$SCRIPT_DIR/scripts_directory.txt"

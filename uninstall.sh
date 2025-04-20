@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #MS_ALIAS="uninstall"
+#MS_SYSTEM
 
 # Fonction d'aide
 show_help() {

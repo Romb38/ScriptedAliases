@@ -1,6 +1,12 @@
 #!/bin/bash
 
 #MS_ALIAS="source"
+#MS_SYSTEM
+
+verbose=false
+if [[ "$1" == "-v" || "$1" == "--verbose" ]]; then
+  verbose=true
+fi
 
 # Récupérer le chemin absolu du répertoire où le script est situé
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -14,9 +20,11 @@ fi
 
 # Initialisation
 alias_count=0
+system_alias_count=0
 no_alias_files=()
 conflict_map=()
 declare -A alias_to_file
+declare -A alias_is_system
 shopt -s nullglob
 
 # Réinitialiser les fichiers de sortie
@@ -31,16 +39,24 @@ process_directory() {
   chmod u+x "${files[@]}" 2>/dev/null
 
   for file in "${files[@]}"; do
-    # Vérifie si #MS_IGNORE est présent
+    # Ignorer les fichiers marqués #MS_IGNORE
     if grep -q '^#MS_IGNORE' "$file"; then
       continue
     fi
 
-    # Recherche la ligne d'alias
+    # Vérifier la ligne d'alias
     alias_line=$(grep -m 1 '^#MS_ALIAS=' "$file")
     if [[ -n $alias_line ]]; then
       alias_name=$(echo "$alias_line" | sed 's/^#MS_ALIAS=//;s/"//g')
+      is_system=false
 
+      # Vérifie si c’est un alias système
+      if grep -q '^#MS_SYSTEM' "$file"; then
+        is_system=true
+        alias_is_system["$alias_name"]=true
+      fi
+
+      # Gérer les conflits
       if [[ -n "${alias_to_file[$alias_name]}" ]]; then
         conflict_map["$alias_name"]+="${alias_to_file[$alias_name]} $file "
         unset alias_to_file["$alias_name"]
@@ -70,15 +86,21 @@ for alias_name in "${!alias_to_file[@]}"; do
   echo "$alias_name=$file" >> "$SCRIPT_DIR/aliases.txt"
   echo "$alias_name" >> "$SCRIPT_DIR/commands.txt"
   complete -W "$alias_name" "./$file"
-  alias_count=$((alias_count + 1))
+
+  if [[ "${alias_is_system[$alias_name]}" == "true" ]]; then
+    ((system_alias_count++))
+  else
+    ((alias_count++))
+  fi
 done
 
 # Résumé
-if [[ $alias_count -eq 0 ]]; then
-  echo "Aucun alias trouvé dans les fichiers .sh."
-else
-  echo "Terminé. $alias_count alias uniques récupérés et enregistrés."
+echo "Terminé."
+if $verbose; then
+  echo "$system_alias_count alias systèmes trouvés"
 fi
+  echo "$alias_count alias trouvés"
+
 
 if [[ ${#no_alias_files[@]} -gt 0 ]]; then
   echo "Aucun alias trouvé dans les fichiers suivants :"

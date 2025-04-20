@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #MS_ALIAS="where"
+#MS_SYSTEM
 
 # Vérifie que l'alias est bien fourni
 if [ $# -ne 1 ]; then
