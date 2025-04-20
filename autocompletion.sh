@@ -2,7 +2,7 @@
 
 #MS_IGNORE
 
-SCRIPT_DIR="$HOME/Documents/Scripts"
+SCRIPT_DIR="$HOME/.scripted_aliases"
 
 ms() {
   bash "$SCRIPT_DIR/run_alias.sh" "$@"
