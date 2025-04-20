@@ -2,60 +2,56 @@
 
 #MS_IGNORE
 
-# Vérification si Git est installé
+# Check if git is installed
 if ! command -v git &> /dev/null; then
-  echo "Git n'est pas installé. Veuillez l'installer d'abord."
+  echo "Git is not installed. Please install it before installing ScriptedAliases"
   exit 1
 fi
 
-# Création du dossier .scripted_aliases
+# Creation of $HOME/.scripted_aliases folder
 SCRIPTED_ALIASES_DIR="$HOME/.scripted_aliases"
 if [ ! -d "$SCRIPTED_ALIASES_DIR" ]; then
-  echo "Création du répertoire $SCRIPTED_ALIASES_DIR..."
+  echo "Creation of $SCRIPTED_ALIASES_DIR folder..."
   mkdir -p "$SCRIPTED_ALIASES_DIR"
 else
-  echo "Le répertoire $SCRIPTED_ALIASES_DIR existe déjà."
+  echo "The folder $SCRIPTED_ALIASES_DIR already exist."
 fi
 
-# Clonage du dépôt Git dans le répertoire .scripted_aliases
+# Clone git repository in $HOME/.scripted_aliases
 echo "Clonage du repository ScriptAliases dans $SCRIPTED_ALIASES_DIR..."
 git clone https://github.com/Romb38/ScriptedAliases.git "$SCRIPTED_ALIASES_DIR"
 
-# Détection de l'interpréteur de commande (bash ou zsh)
+# Detect command interpretor
 SHELL_NAME=$(basename "$SHELL")
 if [[ "$SHELL_NAME" == "bash" ]]; then
   RC_FILE="$HOME/.bashrc"
 elif [[ "$SHELL_NAME" == "zsh" ]]; then
   RC_FILE="$HOME/.zshrc"
 else
-  echo "Shell non supportée. Utilisez bash ou zsh."
+  echo "Shell not supported. Please us bash or zsh."
   exit 1
 fi
 
-# Ajout de la ligne source dans .bashrc ou .zshrc (si elle n'existe pas déjà)
+# Adding installation file in bashrc/zshrc
 if ! grep -q "#AUTO : SCRIPTED_ALIASES IMPORT" "$RC_FILE"; then
-  echo "Ajout de la commande de source dans $RC_FILE..."
-  echo -e "\n#AUTO : SCRIPTED_ALIASES IMPORT\nsource \$HOME/.scripted_aliases/autocompletion.sh" >> "$RC_FILE"
+  echo "Adding source commands to $RC_FILE..."
+  echo -e "\n#GENERATED : SCRIPTED_ALIASES IMPORT\nsource \$HOME/.scripted_aliases/autocompletion.sh" >> "$RC_FILE"
 else
-  echo "Les lignes d'importation sont déjà présentes dans $RC_FILE."
+  echo "Source commands are already in $RC_FILE."
 fi
 
-# Exécution du fichier de complétion
-echo "Exécution du fichier autocompletion.sh..."
-source "$SCRIPTED_ALIASES_DIR/autocompletion.sh"
-
-# Exécution du fichier source.sh si présent
+# Adding $HOME/.scripted_aliases (recursively) to aliases repository
 if [ -f "$SCRIPTED_ALIASES_DIR/source.sh" ]; then
-  echo "Exécution du fichier source.sh..."
+  echo "Adding $HOME/.scripted_aliases to aliases repository..."
   $SCRIPTED_ALIASES_DIR/ms_system/manage_dir.sh add -r $SCRIPTED_ALIASES_DIR
-  echo "Exécution de ms source"
+  echo "Execution of ms source..."
   source "$SCRIPTED_ALIASES_DIR/source.sh"
 else
-  echo "Fichier source.sh introuvable dans $SCRIPTED_ALIASES_DIR."
+  echo "Sourcing source file not found in $SCRIPTED_ALIASES_DIR."
 fi
 
-echo "Installation terminée avec succès.\n"
-echo "Redémmarrer le terminal pour finaliser l'installation"
-echo "Où exécutez :"
-echo "      source $HOME/.bashrc (si vous utilisez bash)"
-echo "      source $HOME/.zshrc  (si vous utilisez zsh)"
+echo "Setup sucessful.\n"
+echo "Please restart terminal to conclude installation"
+echo "Or run :"
+echo "      source $HOME/.bashrc (if you're using bash)"
+echo "      source $HOME/.zshrc  (if you're using zsh)"
