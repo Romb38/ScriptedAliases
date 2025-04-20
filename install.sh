@@ -48,9 +48,14 @@ source "$SCRIPTED_ALIASES_DIR/autocompletion.sh"
 if [ -f "$SCRIPTED_ALIASES_DIR/source.sh" ]; then
   echo "Exécution du fichier source.sh..."
   $SCRIPTED_ALIASES_DIR/ms_system/manage_dir.sh add -r $SCRIPTED_ALIASES_DIR
+  echo "Exécution de ms source"
   source "$SCRIPTED_ALIASES_DIR/source.sh"
 else
   echo "Fichier source.sh introuvable dans $SCRIPTED_ALIASES_DIR."
 fi
 
-echo "Installation terminée avec succès."
+echo "Installation terminée avec succès.\n"
+echo "Redémmarrer le terminal pour finaliser l'installation"
+echo "Où exécutez :"
+echo "      source $HOME/.bashrc (si vous utilisez bash)"
+echo "      source $HOME/.zshrc  (si vous utilisez zsh)"
