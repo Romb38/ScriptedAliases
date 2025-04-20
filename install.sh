@@ -40,10 +40,6 @@ else
   echo "Les lignes d'importation sont déjà présentes dans $RC_FILE."
 fi
 
-# Exécution du fichier de complétion
-echo "Exécution du fichier autocompletion.sh..."
-source "$SCRIPTED_ALIASES_DIR/autocompletion.sh"
-
 # Exécution du fichier source.sh si présent
 if [ -f "$SCRIPTED_ALIASES_DIR/source.sh" ]; then
   echo "Exécution du fichier source.sh..."
