@@ -1,7 +1,5 @@
 # Scripted Aliases
 
-
-
 ## Installation
 
 Pour installer cet utilitaire sur votre machine (attention à ce que vous piper dans bash !)
