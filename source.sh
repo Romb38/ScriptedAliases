@@ -3,10 +3,14 @@
 #MS_ALIAS="source"
 #MS_SYSTEM
 
-verbose=false
-if [[ "$1" == "-v" || "$1" == "--verbose" ]]; then
-  verbose=true
-fi
+
+# Détection du niveau de verbosité
+verbosity=0
+case "$1" in
+  -v|--verbose) verbosity=1 ;;
+  -vv|--vverbose) verbosity=2 ;;
+  -vvv|--vvverbose) verbosity=3 ;;
+esac
 
 # Récupérer le chemin absolu du répertoire où le script est situé
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -44,19 +48,17 @@ process_directory() {
       continue
     fi
 
-    # Vérifier la ligne d'alias
+    # Vérifie la ligne d'alias
     alias_line=$(grep -m 1 '^#MS_ALIAS=' "$file")
     if [[ -n $alias_line ]]; then
       alias_name=$(echo "$alias_line" | sed 's/^#MS_ALIAS=//;s/"//g')
       is_system=false
 
-      # Vérifie si c’est un alias système
       if grep -q '^#MS_SYSTEM' "$file"; then
         is_system=true
         alias_is_system["$alias_name"]=true
       fi
 
-      # Gérer les conflits
       if [[ -n "${alias_to_file[$alias_name]}" ]]; then
         conflict_map["$alias_name"]+="${alias_to_file[$alias_name]} $file "
         unset alias_to_file["$alias_name"]
@@ -73,7 +75,7 @@ process_directory() {
   done
 }
 
-# Lire les répertoires depuis scripts_directory.txt et les traiter
+# Lire les répertoires depuis scripts_directory.txt
 while IFS= read -r dir; do
   [[ -z "$dir" || "$dir" =~ ^# ]] && continue
   dir="${dir/#\~/$HOME}"
@@ -92,15 +94,28 @@ for alias_name in "${!alias_to_file[@]}"; do
   else
     ((alias_count++))
   fi
+
+  # Affichage selon le niveau de verbosité
+  if (( verbosity >= 2 )); then
+    display_name="$alias_name"
+    if [[ "${alias_is_system[$alias_name]}" == "true" ]]; then
+      display_name+=" (system)"
+    fi
+
+    if (( verbosity == 2 )); then
+      echo "🔹 $display_name"
+    elif (( verbosity == 3 )); then
+      echo "🔹 $display_name => $file"
+    fi
+  fi
 done
 
 # Résumé
 echo "Terminé."
-if $verbose; then
-  echo "$system_alias_count alias systèmes trouvés"
+if (( verbosity >= 1 )); then
+  echo "$system_alias_count alias système"
+  echo "$alias_count alias utilisateur trouvé"
 fi
-  echo "$alias_count alias trouvés"
-
 
 if [[ ${#no_alias_files[@]} -gt 0 ]]; then
   echo "Aucun alias trouvé dans les fichiers suivants :"
