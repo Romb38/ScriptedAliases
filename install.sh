@@ -18,8 +18,8 @@ else
 fi
 
 # Clonage du dépôt Git dans le répertoire .scripted_aliases
-echo "Clonage du repository MS_Scripts dans $SCRIPTED_ALIASES_DIR..."
-git clone git@github.com:Romb38/ScriptedAliases.git "$SCRIPTED_ALIASES_DIR"
+echo "Clonage du repository ScriptAliases dans $SCRIPTED_ALIASES_DIR..."
+git clone https://github.com/Romb38/ScriptedAliases.git "$SCRIPTED_ALIASES_DIR"
 
 # Détection de l'interpréteur de commande (bash ou zsh)
 SHELL_NAME=$(basename "$SHELL")
