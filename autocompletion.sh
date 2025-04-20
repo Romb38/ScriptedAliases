@@ -2,10 +2,11 @@
 
 #MS_IGNORE
 
-SCRIPT_DIR="$HOME/.scripted_aliases"
+# Source constant file
+source "$HOME/.scripted_aliases/constants.sh"
 
 ms() {
-  bash "$SCRIPT_DIR/run_alias.sh" "$@"
+  bash "$PROJECT_ROOT_DIRECTORY/run_alias.sh" "$@"
 }
 
 concat_lines() {
@@ -26,7 +27,7 @@ _ms_completion() {
 
   # Stop autocomplete on first args
   if [ $COMP_CWORD -eq 1 ]; then
-    COMPREPLY=( $(compgen -W "$(concat_lines "$SCRIPT_DIR/commands.txt")" -- "$cur") )
+    COMPREPLY=( $(compgen -W "$(concat_lines "$PROJECT_ROOT_DIRECTORY/commands.txt")" -- "$cur") )
   else
     COMPREPLY=( $(compgen -f -- "$cur") )
   fi

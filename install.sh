@@ -21,6 +21,9 @@ fi
 echo "Clonage du repository ScriptAliases dans $SCRIPTED_ALIASES_DIR..."
 git clone https://github.com/Romb38/ScriptedAliases.git "$SCRIPTED_ALIASES_DIR"
 
+# Source constant file
+source "$HOME/.scripted_aliases/constants.sh"
+
 # Detect command interpretor
 SHELL_NAME=$(basename "$SHELL")
 if [[ "$SHELL_NAME" == "bash" ]]; then
@@ -41,13 +44,13 @@ else
 fi
 
 # Adding $HOME/.scripted_aliases (recursively) to aliases repository
-if [ -f "$SCRIPTED_ALIASES_DIR/source.sh" ]; then
-  echo "Adding $HOME/.scripted_aliases to aliases repository..."
-  $SCRIPTED_ALIASES_DIR/ms_system/manage_dir.sh add -r $SCRIPTED_ALIASES_DIR
+if [ -f "$PROJECT_ROOT_DIRECTORY/source.sh" ]; then
+  echo "Adding $PROJECT_ROOT_DIRECTORY to aliases repository..."
+  $PROJECT_ROOT_DIRECTORY/ms_system/manage_dir.sh add -r $PROJECT_ROOT_DIRECTORY
   echo "Execution of ms source..."
-  source "$SCRIPTED_ALIASES_DIR/source.sh"
+  source "$PROJECT_ROOT_DIRECTORY/source.sh"
 else
-  echo "Sourcing source file not found in $SCRIPTED_ALIASES_DIR."
+  echo "Sourcing source file not found in $PROJECT_ROOT_DIRECTORY."
 fi
 
 echo "Setup sucessful.\n"
