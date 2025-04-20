@@ -52,4 +52,6 @@ else
   echo "Fichier source.sh introuvable dans $SCRIPTED_ALIASES_DIR."
 fi
 
+source "$RC_FILE"
+
 echo "Installation terminée avec succès."
