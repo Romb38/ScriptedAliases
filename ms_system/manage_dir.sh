@@ -4,7 +4,7 @@
 #MS_SYSTEM
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-SCRIPTS_FILE="$SCRIPT_DIR/scripts_directory.txt"
+SCRIPTS_FILE="$SCRIPT_DIR/../scripts_directory.txt"
 
 # Si le fichier n'existe pas, avertir et sortir
 if [[ ! -f "$SCRIPTS_FILE" ]]; then
