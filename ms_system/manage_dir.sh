@@ -15,14 +15,14 @@ if [[ ! -f "$SCRIPTS_FILE" ]]; then
 fi
 
 show_help() {
-  echo "Utilisation : $0 [commande] [-r] [chemin]"
+  echo "Utilisation : $0 [commande] [--verbose] [-r] [chemin]"
   echo ""
   echo "Commandes disponibles :"
-  echo "  list                       Liste les répertoires enregistrés"
-  echo "  add [-r] <chemin>          Ajoute un répertoire ou tous les sous-répertoires"
-  echo "  remove [-r] <chemin>       Supprime un répertoire ou tous ceux qui en dépendent"
-  echo "  reset                      Supprime tous les répertoires"
-  echo "  help                       Affiche cette aide"
+  echo "  list                             Liste les répertoires enregistrés"
+  echo "  add [--verbose] [-r] <chemin>    Ajoute un répertoire ou tous les sous-répertoires"
+  echo "  remove [-r] <chemin>             Supprime un répertoire ou tous ceux qui en dépendent"
+  echo "  reset                            Supprime tous les répertoires"
+  echo "  help                             Affiche cette aide"
 }
 
 list_dirs() {
@@ -32,10 +32,16 @@ list_dirs() {
 
 add_dir() {
   local recursive=false
-  if [[ $1 == "-r" ]]; then
-    recursive=true
+  local verbose=false
+
+  while [[ "$1" == "--verbose" || "$1" == "-r" ]]; do
+    if [[ $1 == "--verbose" ]]; then
+      verbose=true
+    elif [[ $1 == "-r" ]]; then
+      recursive=true
+    fi
     shift
-  fi
+  done
 
   local base="${1/#\~/$HOME}"
   base="$(realpath -m "$base")"
@@ -51,7 +57,7 @@ add_dir() {
 
   if [[ -f "$ignore_file" ]]; then
     while IFS= read -r line || [[ -n "$line" ]]; do
-      [[ -z "$line" || "$line" == \#* ]] && continue  # ignorer lignes vides et commentaires
+      [[ -z "$line" || "$line" == \#* ]] && continue
       ignored_paths+=("$(realpath -m "$base/$line")")
     done < "$ignore_file"
   fi
@@ -70,20 +76,19 @@ add_dir() {
     echo "Recherche récursive dans : $base"
     find "$base" -type d | while read -r dir; do
       if should_ignore "$dir"; then
-        echo "Ignoré (dans .ms_ignore) : $dir"
+        $verbose && echo "Ignoré (dans .ms_ignore) : $dir"
       else
         add_single_dir "$dir"
       fi
     done
   else
     if should_ignore "$base"; then
-      echo "Répertoire ignoré (dans .ms_ignore) : $base"
+      $verbose && echo "Répertoire ignoré (dans .ms_ignore) : $base"
     else
       add_single_dir "$base"
     fi
   fi
 }
-
 
 add_single_dir() {
   local dir="$1"

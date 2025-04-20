@@ -20,8 +20,6 @@ SCRIPTS_LIST_FILE="$SCRIPT_DIR/scripts_directory.txt"
 if [ ! -f "$SCRIPTS_LIST_FILE" ]; then
   echo "Fichier scripts_directory.txt non trouvé. Création avec $SCRIPT_DIR."
   echo "$SCRIPT_DIR" > "$SCRIPTS_LIST_FILE"
-  echo "$SCRIPT_DIR/ms_system" >> "$SCRIPTS_LIST_FILE"
-
 fi
 
 # Initialisation
