@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#MS_IGNORE
+
 # ========== PROJECT CONSTANTS ==========
 PROJECT_NAME="ScriptedAliases"
 PROJECT_ROOT_DIRECTORY="$HOME/.scripted_aliases"
